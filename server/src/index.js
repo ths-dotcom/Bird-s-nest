@@ -6,6 +6,7 @@ const cors = require('cors');
 const route = require('./routes/index');
 const db = require('./configs/db/index');
 require('dotenv').config()
+const path = require('path');
 
 app.use(
   express.urlencoded({
@@ -17,6 +18,8 @@ app.use(cookieParser());
 app.use(cors());
 
 db.connect();
+
+app.use(express.static(path.join(__dirname + '/public')));
 
 route(app);
 
