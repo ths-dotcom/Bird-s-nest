@@ -4,7 +4,7 @@ const slug = require('mongoose-slug-generator');
 
 mongoose.plugin(slug);
 
-const User = new Schema(
+const Admin = new Schema(
     {
         email: {type: String, required: true, unique: true}, 
         password: {type: String, required: true},
@@ -17,4 +17,4 @@ const User = new Schema(
     {timestamps: true}
 );
 
-module.exports = mongoose.model('User', User);
+module.exports = mongoose.model('Admin', Admin);

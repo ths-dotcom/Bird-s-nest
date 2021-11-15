@@ -3,8 +3,10 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+// const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
+const {ACCESS_TOKEN_SECRET} = require('../../configs/JWT/index');
 const saltRounds = parseInt(process.env.saltRounds);
+const { userRole } = require('../../configs/datas_roles/roles');
 
 const encodedToken = (userId) => {
     return jwt.sign(
@@ -44,7 +46,7 @@ class UserController {
         // hash mật khẩu
         const hash = bcrypt.hashSync(req.body.password, saltRounds);
         req.body.password = hash;
-
+        req.body.role = userRole;
         let newUser = new User(req.body);
         newUser.save()
             .then(() => {
