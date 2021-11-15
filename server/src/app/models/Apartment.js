@@ -15,7 +15,7 @@ const Apartment = new Schema(
         slug: { type: String, slug: 'name', unique: true },
         ultilities_img : {type: String},
         images: {type: Array},
-        type: {type: String},
+        type_slug: {type: String},
         detail: {type: String, default: aparment_detail},
         deleted: {type: String, default: false}
     },
