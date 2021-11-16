@@ -6,12 +6,13 @@ const jwt = require('jsonwebtoken');
 // const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const {ACCESS_TOKEN_SECRET} = require('../../configs/JWT/index');
 const saltRounds = parseInt(process.env.saltRounds);
-const { userRole } = require('../../configs/datas_roles/roles');
+const { userRole, adminRole } = require('../../configs/datas_roles/roles');
 
-const encodedToken = (userId, userRole) => {
+const encodedToken = (userName, slugName, userRole) => {
     return jwt.sign(
         {
-            id: userId,
+            username: userName,
+            slug: slugName,
             role: userRole,
             iat: new Date().getTime(), 
             exp: new Date().setDate(new Date().getDate() + 1)
@@ -52,7 +53,7 @@ class UserController {
         newUser.save()
             .then(() => {
                 // tạo token
-                const token = encodedToken(newUser._id, newUser.role);
+                const token = encodedToken(newUser.username, newUser.slug_name, newUser.role);
                 res.setHeader('Authorization', token);
                 res.status(201).json({success: true});
             })
@@ -83,7 +84,7 @@ class UserController {
                     })
                     if(result) {
                         // tạo token
-                        const token = encodedToken(user._id, user.role);
+                        const token = encodedToken(user.username, user.slug_name, user.role);
                         res.setHeader('Authorization', token);
                         res.json({
                             success: true,
@@ -106,20 +107,14 @@ class UserController {
 
     // [GET] /api/users/auth-token
     authToken(req, res, next) {
-        User.findOne({_id: req.user.id}).lean()
-            .then(user => {
-                if(!user) return res.json({
-                    success: false,
-                    message: 'người dùng không tồn tại'
-                })
-                res.json({
-                    success: true,
-                    user
-                })
-            })
-            .catch(err => {
-                res.status(500).json(err);
-            })
+        if(!req.login) return res.json({login: false});
+        const Role = (req.user.role === adminRole) ? 'admin' : 'user';
+        res.json({
+            login: true,
+            username: req.user.username,
+            slug : req.user.slug,
+            role : Role
+        }) 
     }
 }
 

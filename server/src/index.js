@@ -7,6 +7,7 @@ const route = require('./routes/index');
 const db = require('./configs/db/index');
 require('dotenv').config()
 const path = require('path');
+const authMiddleware = require('./app/middlewares/authMiddleware');
 
 app.use(
   express.urlencoded({
@@ -16,6 +17,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+
+app.use(authMiddleware);
 
 db.connect();
 
