@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
+const userAvatar = './users/user.png';
 
 mongoose.plugin(slug);
 
@@ -12,7 +13,8 @@ const User = new Schema(
         tel: {type: String, required: true},
         address: {type: String, required: true},
         slug_name: { type: String, slug: 'username', unique: true},
-        role: {type: Number, required: true}
+        role: {type: Number, required: true},
+        avatar: {type: String, default: userAvatar}
     }, 
     {timestamps: true}
 );

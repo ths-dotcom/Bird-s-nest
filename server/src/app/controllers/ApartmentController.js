@@ -133,7 +133,7 @@ class ApartmentController {
             })
     }
 
-
+    
 }
 
 module.exports = new ApartmentController;
