@@ -8,10 +8,11 @@ const {ACCESS_TOKEN_SECRET} = require('../../configs/JWT/index');
 const saltRounds = parseInt(process.env.saltRounds);
 const { userRole } = require('../../configs/datas_roles/roles');
 
-const encodedToken = (userId) => {
+const encodedToken = (userId, userRole) => {
     return jwt.sign(
         {
-            id: userId, 
+            id: userId,
+            role: userRole,
             iat: new Date().getTime(), 
             exp: new Date().setDate(new Date().getDate() + 1)
         },
@@ -51,7 +52,7 @@ class UserController {
         newUser.save()
             .then(() => {
                 // tạo token
-                const token = encodedToken(newUser._id);
+                const token = encodedToken(newUser._id, newUser.role);
                 res.setHeader('Authorization', token);
                 res.status(201).json({success: true});
             })
@@ -82,7 +83,7 @@ class UserController {
                     })
                     if(result) {
                         // tạo token
-                        const token = encodedToken(user._id);
+                        const token = encodedToken(user._id, user.role);
                         res.setHeader('Authorization', token);
                         res.json({
                             success: true,

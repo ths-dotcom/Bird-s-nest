@@ -7,7 +7,7 @@ async function connect() {
     // Chạy local cho đỡ lag
     // mongoAtlasUri = "mongodb://localhost:27017/Bird'snest";
     try {
-        await mongoose.connect(mongoAtlasUri);
+        await mongoose.connect(mongoAtlasUri); 
         console.log('connect successfully');
     } catch (err) {
         console.log('Connect failure!!!');
