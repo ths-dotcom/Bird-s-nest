@@ -2,14 +2,14 @@ import axiosClient from './../config/axiosClient';
 
 class ApartmentApi {
   get = (params) => {
-    const url = "/apartment";
+    const url = "/apartments";
     return axiosClient.get(url, {
       params
      });
   };
 
   count = (params) => {
-    const url = "/all-count";
+    const url = "/apartments/all-count";
     return axiosClient.get(url, {
       params
      });

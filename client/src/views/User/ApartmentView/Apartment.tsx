@@ -2,6 +2,8 @@ import React from "react";
 import apartmentApi from "../../../api/ApartmentApi";
 
 export interface Data {
+  status: boolean;
+  
   name: string;
   area: string;
   price: number;
@@ -17,7 +19,7 @@ export default function Apartment() {
       try {
         const response = await apartmentApi.get();
         console.log(response);
-        setData(response.data);
+        setData(response.data.apartments);
       } catch (error) {
         console.log(error);
       }
