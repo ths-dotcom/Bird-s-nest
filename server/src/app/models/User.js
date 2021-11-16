@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
-const userAvatar = './users/user.png';
+const userAvatar = 'img/users/user.png';
 
 mongoose.plugin(slug);
 
