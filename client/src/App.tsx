@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminLogin from "./views/Admin/AdminLoginView/AdminLogin";
-import Apartment from "./views/User/ApartmentView/Apartment/Apartment";
+import Apartment from "./views/User/ApartmentView/ApartmentMaster/ApartmentMaster";
 import Login from "./views/User/LoginView/Login";
 import Register from "./views/User/RegisterView/Register";
 import "./App.scss";
