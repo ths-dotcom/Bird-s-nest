@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
-const userAvatar = '/img/users/user.png';
+// const userAvatar = '/img/users/user.png';
+const userAvatar = 'https://iupac.org/wp-content/uploads/2018/05/default-avatar.png';
 
 mongoose.plugin(slug);
 

@@ -1,5 +1,7 @@
 const Apartment = require('../models/Apartment');
 const Apartment_type = require('../models/Apartment_type');
+const Feedback = require('../models/Feedback');
+const User = require('../models/User');
 
 class ApartmentController {
     // [GET] /api/apartments
@@ -133,7 +135,52 @@ class ApartmentController {
             })
     }
 
-    
+    // [GET] /api/apartments/:slugName/get-feedbacks
+    getFeedbacks(req, res, next) {
+        Feedback.find({apartment_slug: req.params.slugName}).lean()
+            .then(feedbacks => {
+                res.json({
+                    success: true,
+                    feedbacks
+                })
+            })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] /api/apartments/:slugName/add-feedback
+    addFeedback(req, res, next) {
+        if(req.login) {
+            User.findOne({slug_name: req.user.slug}).lean()
+                .then(user => {
+                    const feedback = new Feedback({
+                        apartment_slug: req.params.slugName, 
+                        cus_slug: user.slug_name, 
+                        cus_name: user.username, 
+                        cus_avatar: user.avatar,
+                        comment: req.body.comment
+                    });
+                    return feedback;
+                })
+                .then(feedback => {
+                    feedback.save()
+                        .then(() => {
+                            res.json({
+                                success: true,
+                                message: 'Đã lưu phản hồi'
+                            })
+                        })
+                })
+                .catch(err => {
+                    res.status(500).json({
+                        success: false,
+                        err
+                    })
+                })
+        }
+    }
 }
 
 module.exports = new ApartmentController;
