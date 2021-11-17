@@ -9,7 +9,7 @@ const Apartment = new Schema(
     {
         name: {type: String}, 
         area: {type: String},
-        number_of_cus: {type:String, required: true},
+        number_of_cus: {type:String},
         price: {type: Number},
         description: {type: String},
         slug: { type: String, slug: 'name', unique: true },
