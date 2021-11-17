@@ -2,6 +2,7 @@ require('dotenv').config();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Order = require('../models/Order');
 
 // const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET;
 const {ACCESS_TOKEN_SECRET} = require('../../configs/JWT/index');
@@ -115,6 +116,21 @@ class UserController {
             slug : req.user.slug,
             role : Role
         }) 
+    }
+
+    // [GET] /api/users/orders
+    orders(req, res, next) {
+        Order.find({cus_slug: req.user.slug}).lean()
+            .then(orders => {
+                res.json({
+                    success: true,
+                    orders
+                })
+            })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
     }
 }
 

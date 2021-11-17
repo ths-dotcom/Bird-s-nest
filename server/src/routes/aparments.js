@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const apartmentController = require('../app/controllers/ApartmentController');
 
+router.get('/sort/:value', apartmentController.showAllSort);
+router.post('/:slugName/save-order', apartmentController.saveOrder);
 router.post('/:slugName/add-feedback', apartmentController.addFeedback);
 router.get('/:slugName/get-feedbacks', apartmentController.getFeedbacks);
 router.get('/:slugName/related-products/:slugType', apartmentController.relatedProducts);

@@ -6,8 +6,8 @@ function userPermission(req, res, next) {
         success: false,
         message: 'Không được phép truy cập'
     })
-    // không phải user, không phải chính chủ 
-    if(req.user.role !== userRole || req.user.slug !== req.params.slugName) {
+    // không phải user, --không phải chính chủ 
+    if(req.user.role !== userRole) {
         return res.json({
             success: false,
             message: 'Không được phép truy cập'
