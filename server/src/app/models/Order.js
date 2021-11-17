@@ -13,7 +13,7 @@ const Order = new Schema(
         price: {type: Number},
         order_date: {type: Date, default: Date.now},
         check_in_date: {type: Date, default: null},
-        check_out_date: {type: Date, default: null},
+        return_date: {type: Date, default: null},
         status: {type: String, default: null},
     }
 );

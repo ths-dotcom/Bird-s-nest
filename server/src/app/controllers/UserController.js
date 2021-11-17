@@ -106,7 +106,7 @@ class UserController {
             })
     }
 
-    // [GET] /api/users/auth-token
+    // [GET] /api/auth-token
     authToken(req, res, next) {
         if(!req.login) return res.json({login: false});
         const Role = (req.user.role === adminRole) ? 'admin' : 'user';
@@ -127,6 +127,21 @@ class UserController {
                     orders
                 })
             })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [PATCH] /api/users/orders/:id/cancel
+    cancel(req, res, next) {
+        Order.updateOne({_id: req.params.id}, {
+            $set :{ status: 'canceled' }
+        })
+            .then(() => res.json({
+                success: true,
+                message: 'Hủy phòng thành công'
+            }))
             .catch(err => res.status(500).json({
                 success: false,
                 err
