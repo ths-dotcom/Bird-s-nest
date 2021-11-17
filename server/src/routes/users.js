@@ -5,6 +5,7 @@ const signupCheckMiddleware = require('../app/middlewares/signupCheckMiddleware'
 const authMiddleware = require('../app/middlewares/authMiddleware');
 const userMiddleware = require('../app/middlewares/userMiddleware');
 
+router.patch('/orders/:id/cancel', userMiddleware, userController.cancel);
 router.get('/orders', userMiddleware, userController.orders);
 router.get('/auth-token', userController.authToken);
 router.post('/login', userController.login);

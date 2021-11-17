@@ -265,6 +265,30 @@ class ApartmentController {
                 err
             }))
     }
+
+    // [GET] /api/apartments/:slugName/check-order
+    checkOrder(req, res, next) {
+        Order.find({apartment_slug: req.params.slugName, status: 'confirmed'}).sort({order_date: 'desc'}).lean()
+            .then(apartments => {
+                if(!apartments.length) return res.json({
+                    success: true,
+                    available: true
+                })
+                let apartment = apartments[0];
+                if(apartment.return_date) return res.json({
+                    success: true,
+                    available: true
+                })
+                res.json({
+                    success: true,
+                    available: false
+                })
+            })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
 }
 
 module.exports = new ApartmentController;
