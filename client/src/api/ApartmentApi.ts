@@ -17,7 +17,7 @@ class ApartmentApi {
     const url = "/apartments/all-count";
     return axiosClient.get(url, {
       params
-     });
+     }).then(response => response.data);
   };
 }
 const apartmentApi = new ApartmentApi();
