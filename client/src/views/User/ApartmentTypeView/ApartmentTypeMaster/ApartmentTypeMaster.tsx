@@ -5,7 +5,6 @@ import "./ApartmentTypeMaster.scss";
 import { ApartmentType } from "../../../../models/ApartmentType/ApartmentType";
 
 export default function ApartmentTypeMaster() {
-  const link: string = "http://localhost:3001/";
   const [data, setData] = React.useState<ApartmentType>();
 
   React.useEffect(() => {
@@ -43,7 +42,7 @@ export default function ApartmentTypeMaster() {
             return (
               <div  key={item._id}>
                 <div className="">
-                  <img src={link + item.image} alt="error" />
+                  <img src={item.image} alt="error" />
                 </div>
                 <div>
                   <h3>{item.name}</h3>
