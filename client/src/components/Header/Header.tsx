@@ -13,11 +13,11 @@ export default function Header() {
           <Link className="link" to="/">
             Trang chủ
           </Link>
-          <Link className="link" to="/apartments">
-            Căn hộ
-          </Link>
-          <Link className="link" to="/apartment-type">
+          <Link className="link" to="/apartment-type-master">
             Loại căn hộ
+          </Link>
+          <Link className="link" to="/apartment-master">
+            Căn hộ
           </Link>
           <Link className="link" to="/ultility">
             Tiện ích
@@ -29,10 +29,10 @@ export default function Header() {
 
         <Col className="navbar-group" span={4}>
           <Link className="link" to="/login">
-            Đăng ký
+            Đăng nhập
           </Link>
           <Link className="link" to="/register">
-            Đăng nhập
+            Đăng ký 
           </Link>
         </Col>
       </Row>
