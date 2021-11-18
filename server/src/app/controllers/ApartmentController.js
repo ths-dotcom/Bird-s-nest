@@ -116,8 +116,8 @@ class ApartmentController {
     }
 
     // [GET] /api/apartments/:slugName/related-products/:slugType
-    relatedProducts(req, res, next) {     
-        Apartment.find({slug: {$ne: req.params.slugName}, slug_type: req.params.slugType}, {name:1, price:1, slug:1, images:1}).lean()
+    relatedProducts(req, res, next) {
+        Apartment.find({slug: {$ne : req.params.slugName}, type_slug: req.params.slugType}, {name:1, price:1, slug:1, images:1}).lean()
             .then(apartments => {
                 if(!apartments.length) return res.status(404).json({
                     success: false,
