@@ -94,7 +94,7 @@ class ApartmentController {
             }))
     }
 
-    // [GET] api/apartments/types/:slugName/apartments
+    // [GET] api/apartments/types/:slugName
     apartmentsOfType(req, res, next) {
         Apartment.find({type_slug: req.params.slugName}, {name:1, price:1, slug:1, images:1}).lean()
             .then(apartments => {
@@ -282,6 +282,22 @@ class ApartmentController {
                 res.json({
                     success: true,
                     available: false
+                })
+            })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] /api/apartments/add-appartment
+    addApartment(req, res, next) {
+        const newApartment = new Apartment(req.body);
+        newApartment.save()
+            .then(() => {
+                res.json({
+                    success: true,
+                    message: 'Thêm phòng mới thành công'
                 })
             })
             .catch(err => res.status(500).json({
