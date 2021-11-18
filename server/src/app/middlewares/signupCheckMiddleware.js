@@ -1,23 +1,23 @@
 const User = require('../models/User');
+const Admin = require('../models/Admin');
 
 function signupCheck(req, res, next) {
     if(!req.body) return res.status(400).json({
         success: false
     })
-    User.findOne({email: req.body.email}).lean()
-        .then(user => {
-            if(user) return res.status(400).json({
+    Promise.all([User.findOne({email: req.body.email}).lean(),
+        Admin.findOne({email: req.body.email}).lean()])
+        .then(([user, admin]) => {
+            if(user || admin) return res.json({
                 success: false,
-                message: 'Email đã đăng kí tài khoản'
-            })
-            return next();
+                message: 'Email đã được đăng kí'
+            }) 
+            next();
         })
-        .catch(err => {
-            res.status(500).json({
-                success: false,
-                err
-            })
-        }) 
+        .catch(err => res.json({
+            success: false,
+            err
+        }))
 }
 
 module.exports = signupCheck;
