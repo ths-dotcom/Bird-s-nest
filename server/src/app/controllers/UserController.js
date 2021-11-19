@@ -47,10 +47,10 @@ class UserController {
     // [POST] /api/users/signup
     signup(req, res, next) {
         // hash mật khẩu
-        const hash = bcrypt.hashSync(req.body.password, saltRounds);
-        req.body.password = hash;
-        req.body.role = userRole;
-        let newUser = new User(req.body);
+        const hash = bcrypt.hashSync(req.body.data.password, saltRounds);
+        req.body.data.password = hash;
+        req.body.data.role = userRole;
+        let newUser = new User(req.body.data);
         newUser.save()
             .then(() => {
                 // tạo token
@@ -69,8 +69,8 @@ class UserController {
 
     // [POST] /api/users/login
     login(req, res, next) {
-        req.body.email = req.body.email.trim();
-        req.body.password = req.body.password.trim();
+        req.body.email = req.body.data.email.trim();
+        req.body.password = req.body.data.password.trim();
 
         User.findOne({email: req.body.email}).lean()
             .then(user => {
