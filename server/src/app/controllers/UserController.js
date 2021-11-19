@@ -27,7 +27,7 @@ class UserController {
     infor(req, res, next) {
         User.findOne({slug_name: req.params.slugName}).lean()
             .then(user => {
-                if(!user) return res.status(404).json({
+                if(!user) return res.json({
                     success: false,
                     message: 'Người dùng không tồn tại'
                 })
@@ -74,7 +74,7 @@ class UserController {
 
         User.findOne({email: req.body.email}).lean()
             .then(user => {
-                if(!user) return res.status(404).json({
+                if(!user) return res.json({
                     success: false,
                     message: 'Email chưa chính xác'
                 })
@@ -92,7 +92,7 @@ class UserController {
                             message: 'Đăng nhập thành công'
                         })
                     }
-                    else res.status(404).json({
+                    else res.json({
                         success: false,
                         message: 'Mật khẩu chưa chính xác'
                     })
