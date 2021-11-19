@@ -4,7 +4,7 @@ const Admin = require('../models/Admin');
 function signupCheck(req, res, next) {
     if(!req.body.data) return res.status(400).json({
         success: false
-    }) 
+    })
     Promise.all([User.findOne({email: req.body.data.email}).lean(),
         Admin.findOne({email: req.body.data.email}).lean()])
         .then(([user, admin]) => {
