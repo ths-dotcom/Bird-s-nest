@@ -21,16 +21,14 @@ export default function Footer() {
         </div>
         <ul className="">
           <li className="list-inline-item">
-            <a href="#">Home</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">Services</a>
-          </li>
-          <li className="list-inline-item">
-            <a href="#">About</a>
+            <a href="#">Trang chu</a>
+            <a href="#">Loai can ho</a>
+            <a href="#">Can ho</a>
+            <a href="#">Lien he</a>
+            <a href="#">Tien ich</a>
           </li>
         </ul>
-        <p className="copyright">Company Name © 2018</p>
+        <p className="copyright">@ Copyright Homestay Chim tren cay</p>
       </footer>
     </div>
   );
