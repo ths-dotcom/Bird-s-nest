@@ -7,4 +7,5 @@ export interface UserData {
   address?: string;
   role?: number;
   slug_name?: string;
+  avatar?: string;
 }

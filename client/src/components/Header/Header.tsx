@@ -1,8 +1,41 @@
-import { Button, Col, Row } from "antd";
-import { Link } from "react-router-dom";
 import "./Header.scss";
+import { Button, Col, Dropdown, Menu, Row } from "antd";
+import React from "react";
+import { Link } from "react-router-dom";
+import userApi from "../../api/UserApi";
+import { AuthToken } from "../../models/AuthToken/AuthToken";
 
 export default function Header() {
+  const [authToken, setAuthToken] = React.useState<AuthToken>();
+  const token = localStorage.getItem("token");
+
+  const handleLogOut = React.useCallback(() => {
+    localStorage.removeItem("token");
+  }, []);
+
+  const login = authToken?.login;
+  const username = authToken?.username;
+
+  React.useEffect(() => {
+    function fetchData() {
+      userApi.authentication(token).then((result) => setAuthToken(result));
+    }
+    fetchData();
+  }, [token]);
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="0">
+        <Link className="link" to="/profile">
+          Profile
+        </Link>
+      </Menu.Item>
+      <Menu.Item key="1">
+        <button onClick={handleLogOut}>Log out</button>
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div>
       <Row>
@@ -30,16 +63,31 @@ export default function Header() {
           </Link>
         </Col>
 
-        <Col className="navbar-group" span={4}>
-          <Link className="link" to="/login">
-            Đăng nhập
-          </Link>
-          <Button className="button-link" type="dashed">
-            <Link className="link" to="/register">
-              Đăng ký
-            </Link>
-          </Button>
-        </Col>
+        {/* <Col className="navbar-group" span={4}> */}
+          {/* <div>
+            {!login && (
+              <>
+                {" "}
+                <Link className="link" to="/login">
+                  Đăng nhập
+                </Link>
+                <Button className="button-link" type="dashed">
+                  <Link className="link" to="/register">
+                    Đăng ký
+                  </Link>
+                </Button>
+              </>
+            )}
+            {login && (
+              <>
+                {" "}
+                <Dropdown overlay={menu} trigger={["click"]}>
+                  Xin chao, {username}
+                </Dropdown>
+              </>
+            )}
+          </div> */}
+        {/* </Col> */}
       </Row>
     </div>
   );
