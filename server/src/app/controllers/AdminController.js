@@ -55,7 +55,10 @@ class AdminController {
                 // tạo token
                 const token = encodedToken(newAdmin.username, newAdmin.slug_name, newAdmin.role);
                 res.setHeader('Authorization', token);
-                res.status(201).json({success: true});
+                res.status(201).json({
+                    success: true,
+                    token
+                });
             })
             .catch((err) => {
                 return res.status(400).json({
@@ -88,6 +91,7 @@ class AdminController {
                         res.setHeader('Authorization', token);
                         res.json({
                             success: true,
+                            token,
                             message: 'Đăng nhập thành công'
                         })
                     }
