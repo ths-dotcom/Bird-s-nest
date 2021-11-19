@@ -43,7 +43,7 @@ class ApartmentController {
     detail(req, res, next) {
         Apartment.findOne({slug: req.params.slugName}).lean()
             .then(apartment => {
-                if(!apartment) return res.status(404).json({
+                if(!apartment) return res.json({
                     success: false,
                     message: 'Phòng không tồn tại'
                 })
@@ -79,7 +79,7 @@ class ApartmentController {
     typeDetail(req, res, next) {
         Apartment_type.findOne({slug: req.params.slugName}).lean()
             .then(apartment_type => {
-                if(!apartment_type) return res.status(404).json({
+                if(!apartment_type) return res.json({
                     success: false,
                     message: 'Loại phòng không tồn tại'
                 })
@@ -98,7 +98,7 @@ class ApartmentController {
     apartmentsOfType(req, res, next) {
         Apartment.find({type_slug: req.params.slugName}, {name:1, price:1, slug:1, images:1}).lean()
             .then(apartments => {
-                if(!apartments.length) return res.status(404).json({
+                if(!apartments.length) return res.json({
                     success: false,
                     message: 'Loại phòng không tồn tại'
                 })
@@ -119,7 +119,7 @@ class ApartmentController {
     relatedProducts(req, res, next) {
         Apartment.find({slug: {$ne : req.params.slugName}, type_slug: req.params.slugType}, {name:1, price:1, slug:1, images:1}).lean()
             .then(apartments => {
-                if(!apartments.length) return res.status(404).json({
+                if(!apartments.length) return res.json({
                     success: false,
                     message: 'Không thấy sản phẩm tương tự'
                 })
@@ -161,7 +161,7 @@ class ApartmentController {
                         cus_slug: user.slug_name, 
                         cus_name: user.username, 
                         cus_avatar: user.avatar,
-                        comment: req.body.comment
+                        comment: req.body.data.comment
                     });
                     return feedback;
                 })
@@ -225,9 +225,9 @@ class ApartmentController {
             Apartment.findOne({slug: req.params.slugName}).lean()
                 .then(apartment => {
                     const order = new Order({
-                        cus_name: req.body.name, 
-                        tel : req.body.tel,
-                        email: req.body.email,
+                        cus_name: req.body.data.name, 
+                        tel : req.body.data.tel,
+                        email: req.body.data.email,
                         apartment_name: apartment.name,
                         apartment_slug: apartment.slug,
                         price: apartment.price,

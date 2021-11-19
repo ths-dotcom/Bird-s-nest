@@ -26,7 +26,7 @@ class AdminController {
     infor(req, res, next) {
         Admin.findOne({slug_name: req.params.slugName}).lean()
             .then(admin => {
-                if(!admin) return res.status(404).json({
+                if(!admin) return res.json({
                     success: false,
                     message: 'Người dùng không tồn tại'
                 })
@@ -46,10 +46,10 @@ class AdminController {
     // [POST] /api/admins/signup
     signup(req, res, next) {
         // hash mật khẩu
-        const hash = bcrypt.hashSync(req.body.password, saltRounds);
-        req.body.password = hash;
-        req.body.role = adminRole;
-        let newAdmin = new Admin(req.body);
+        const hash = bcrypt.hashSync(req.body.data.password, saltRounds);
+        req.body.data.password = hash;
+        req.body.data.role = adminRole;
+        let newAdmin = new Admin(req.body.data);
         newAdmin.save()
             .then(() => {
                 // tạo token
@@ -68,12 +68,12 @@ class AdminController {
 
     // [POST] /api/admins/login
     login(req, res, next) {
-        req.body.email = req.body.email.trim();
-        req.body.password = req.body.password.trim();
+        req.body.email = req.body.data.email.trim();
+        req.body.password = req.body.data.password.trim();
 
         Admin.findOne({email: req.body.email}).lean()
             .then(admin => {
-                if(!admin) return res.status(404).json({
+                if(!admin) return res.json({
                     success: false,
                     message: 'Email chưa chính xác'
                 })
@@ -91,7 +91,7 @@ class AdminController {
                             message: 'Đăng nhập thành công'
                         })
                     }
-                    else res.status(404).json({
+                    else res.json({
                         success: false,
                         message: 'Mật khẩu chưa chính xác'
                     })
