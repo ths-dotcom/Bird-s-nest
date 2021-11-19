@@ -1,11 +1,30 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import Header from "../../../components/Header/Header";
+import { Link } from "react-router-dom";
+import React, { SyntheticEvent } from "react";
+import axios from "axios";
 
 export default function Login() {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const onFinish = async () => {
+    const data = { email, password };
+    axios
+      .post("http://localhost:3001/api/users/login", {
+        data,
+        credentials: "include",
+      })
+      .then((response) => console.log(response));
   };
+
+  const handleChangeEmail = React.useCallback((e) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const handleChangePassword = React.useCallback((e) => {
+    setPassword(e.target.value);
+  }, []);
 
   return (
     <>
@@ -17,12 +36,13 @@ export default function Login() {
         onFinish={onFinish}
       >
         <Form.Item
-          name="Tên đăng nhập"
-          rules={[{ required: true, message: "Nhập Tên đăng nhập!" }]}
+          name="Email"
+          rules={[{ required: true, message: "Nhập Email!" }]}
         >
           <Input
+            onChange={handleChangeEmail}
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Tên đăng nhập"
+            placeholder="Email"
           />
         </Form.Item>
         <Form.Item
@@ -30,6 +50,7 @@ export default function Login() {
           rules={[{ required: true, message: "Nhập Mật khẩu!" }]}
         >
           <Input
+            onChange={handleChangePassword}
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
@@ -40,12 +61,7 @@ export default function Login() {
             <Checkbox>Nhớ tôi</Checkbox>
           </Form.Item>
 
-          <a
-            className="login-form-forgot"
-            href="http://localhost:3000/register"
-          >
-            Quên mật khẩu
-          </a>
+          <Link to="/register">Quên mật khẩu</Link>
         </Form.Item>
 
         <Form.Item>
@@ -56,10 +72,10 @@ export default function Login() {
           >
             Đăng nhập
           </Button>
-          Or <a href="http://localhost:3000/register">Đăng ký!</a>
+          Or <Link to="/register">Đăng ký!</Link>
         </Form.Item>
 
-        <a href="http://localhost:3000/admin-login">Bạn là quản trị viên?</a>
+        <Link to="/admin-login">Bạn là quản trị viên?</Link>
       </Form>
     </>
   );

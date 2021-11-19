@@ -9,7 +9,7 @@ class ApartmentTypeApi {
   };
 
   get = (slug?: string) => {
-    const url = "/apartments/type" + slug;
+    const url = "/apartments/types/" + slug;
     return axiosClient.get(url).then(response => response.data);
   };
 
