@@ -8,6 +8,8 @@ class ApartmentApi {
      }).then(response => response.data);
   };
 
+
+
   get = (name?: string) => {
     const url = "/apartments/" + name;
     return axiosClient.get(url).then(response => response.data);
@@ -36,7 +38,7 @@ class ApartmentApi {
   };
 
   getFeedback = (apartmentSlug?: string) => {
-    const url = "/apartments/" + apartmentSlug + "/check-order";
+    const url = "/apartments/" + apartmentSlug + "/get-feedbacks";
     return axiosClient.get(url).then(response => response.data);
   };
 }

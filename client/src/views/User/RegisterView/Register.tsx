@@ -1,7 +1,9 @@
-import { Button, Checkbox, Form, Input, Select } from "antd";
-import Header from "../../../components/Header/Header";
+import { Button, Checkbox, Form, Input } from "antd";
+import axios from "axios";
+import React, { SyntheticEvent } from "react";
 
-const { Option } = Select;
+import Header from "../../../components/Header/Header";
+import { Message } from "../../../models/Message/Message";
 
 const formItemLayout = {
   labelCol: {
@@ -28,18 +30,38 @@ const tailFormItemLayout = {
 
 export default function Register() {
   const [form] = Form.useForm();
+  const [username, setUsername] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [tel, setTel] = React.useState(0);
+  const [address, setAddress] = React.useState("");
 
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const [message, setMessage] = React.useState();
+
+  const handleOnChangeUsername = React.useCallback((e) => {
+    setUsername(e.target.value);
+  }, []);
+  const handleOnChangeEmail = React.useCallback((e) => {
+    setEmail(e.target.value);
+  }, []);
+  const handleOnChangePassword = React.useCallback((e) => {
+    setPassword(e.target.value);
+  }, []);
+  const handleOnChangeTel = React.useCallback((e) => {
+    setTel(e.target.value);
+  }, []);
+  const handleOnChangeAddress = React.useCallback((e) => {
+    setAddress(e.target.value);
+  }, []);
+
+  const onFinish =  async  () => {
+    const data = { email, password, username, tel, address };
+    console.log(data);
+
+    axios
+      .post("http://localhost:3001/api/users/signup", { data })
+      .then((response) => console.log("hello" + response));
   };
-
-  const prefixSelector = (
-    <Form.Item name="prefix" noStyle>
-      <Select style={{ width: 70 }}>
-        <Option value="86">+84</Option>
-      </Select>
-    </Form.Item>
-  );
 
   return (
     <>
@@ -53,7 +75,7 @@ export default function Register() {
         scrollToFirstError
       >
         <Form.Item
-          name="name"
+          name="username"
           label="Họ và tên"
           rules={[
             {
@@ -63,21 +85,24 @@ export default function Register() {
             },
           ]}
         >
-          <Input />
+          <Input onChange={handleOnChangeUsername} />
         </Form.Item>
 
         <Form.Item
-          name="username"
-          label="Tên đăng nhập"
+          name="email"
+          label="E-mail"
           rules={[
             {
+              type: "email",
+              message: "sai định dạng Email",
+            },
+            {
               required: true,
-              message: "Nhập tên đăng nhập!",
-              whitespace: true,
+              message: "Nhập Email!",
             },
           ]}
         >
-          <Input />
+          <Input onChange={handleOnChangeEmail} />
         </Form.Item>
 
         <Form.Item
@@ -86,12 +111,12 @@ export default function Register() {
           rules={[
             {
               required: true,
-              message: "Nhập lại  mật khẩu!",
+              message: "Nhập lại mật khẩu!",
             },
           ]}
           hasFeedback
         >
-          <Input.Password />
+          <Input.Password onChange={handleOnChangePassword} />
         </Form.Item>
 
         <Form.Item
@@ -118,53 +143,25 @@ export default function Register() {
         </Form.Item>
 
         <Form.Item
-          name="phone"
+          name="tel"
           label="Điện thoại"
           rules={[{ required: true, message: "Nhập Điện thoại" }]}
         >
-          <Input addonBefore={prefixSelector} style={{ width: "100%" }} />
+          <Input style={{ width: "100%" }} onChange={handleOnChangeTel} />
         </Form.Item>
 
-        {/* <Form.Item
-      name="birthday"
-      label="Ngày sinh"
-      rules={[
-        {
-          // required: true,
-          message: "Chọn",
-        },
-      ]}
-    >
-      <DatePicker format="DD-MM-yyyy" />
-    </Form.Item> */}
-
         <Form.Item
-          name="email"
-          label="E-mail"
+          name="address"
+          label="Địa chỉ"
           rules={[
             {
-              type: "email",
-              message: "sai định dạng Email",
-            },
-            {
-              // required: true,
-              message: "Nhập Email!",
+              required: true,
+              message: "Nhập địa chỉ!",
+              whitespace: true,
             },
           ]}
         >
-          <Input />
-        </Form.Item>
-
-        <Form.Item
-          name="gender"
-          label="Giới tính"
-          rules={[{ /* required: true,  */ message: "Chọn Giới tính" }]}
-        >
-          <Select>
-            <Option value="male">Nam</Option>
-            <Option value="female">Nữ </Option>
-            <Option value="other">Khác</Option>
-          </Select>
+          <Input onChange={handleOnChangeAddress} />
         </Form.Item>
 
         <Form.Item

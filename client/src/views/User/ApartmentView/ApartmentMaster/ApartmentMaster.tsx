@@ -141,7 +141,13 @@ export default function ApartmentMaster() {
                       onCancel={handleCancel}
                     >
                       {apartmentDetail && apartmentDetail.apartment?.name}
-                      <Button disabled={!checkOrder}>Order</Button>
+                      {checkOrder && (
+                        <Button disabled={false}>Order</Button>
+                      )}
+                      {!checkOrder && (
+                        <Button disabled={true}>Het phong</Button>
+                      )}
+
                       <div>
                         {" "}
                         Cac can tuong tu:
