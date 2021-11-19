@@ -27,7 +27,7 @@ const tailFormItemLayout = {
   },
 };
 
-export default function Register() {
+export default function AdminRegister() {
   const [form] = Form.useForm();
   const [username, setUsername] = React.useState("");
   const [email, setEmail] = React.useState("");
@@ -65,8 +65,7 @@ export default function Register() {
 
   return (
     <>
-      {" "}
-      <Header />
+
       <Form
         {...formItemLayout}
         form={form}

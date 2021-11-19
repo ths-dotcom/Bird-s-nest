@@ -1,15 +1,35 @@
-import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import Header from "../../../components/Header/Header";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input } from "antd";
+import React from "react";
+import { Link } from "react-router-dom";
+
+import axiosClient from "../../../config/axiosClient";
 
 export default function AdminLogin() {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [isLogin, setLogin] = React.useState();
+
+  const onFinish = async () => {
+    const data = { email, password };
+    axiosClient.post("/users/login", { data }).then((response) => {
+      localStorage.setItem("token", response.data.token);
+      setLogin(response.data.success)
+    });
+    (isLogin)? alert("Successful") : alert("Failed");
   };
+
+  const handleChangeEmail = React.useCallback((e) => {
+    setEmail(e.target.value);
+  }, []);
+
+  const handleChangePassword = React.useCallback((e) => {
+    setPassword(e.target.value);
+  }, []);
 
   return (
     <>
-      <Header />
+    gjsdhjghsjdkg
       <Form
         name="normal_login"
         className="login-form"
@@ -17,12 +37,13 @@ export default function AdminLogin() {
         onFinish={onFinish}
       >
         <Form.Item
-          name="Tên đăng nhập"
-          rules={[{ required: true, message: "Nhập Tên đăng nhập!" }]}
+          name="Email"
+          rules={[{ required: true, message: "Nhập Email!" }]}
         >
           <Input
+            onChange={handleChangeEmail}
             prefix={<UserOutlined className="site-form-item-icon" />}
-            placeholder="Tên đăng nhập"
+            placeholder="Email"
           />
         </Form.Item>
         <Form.Item
@@ -30,6 +51,7 @@ export default function AdminLogin() {
           rules={[{ required: true, message: "Nhập Mật khẩu!" }]}
         >
           <Input
+            onChange={handleChangePassword}
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
             placeholder="Mật khẩu"
@@ -40,17 +62,21 @@ export default function AdminLogin() {
             <Checkbox>Nhớ tôi</Checkbox>
           </Form.Item>
 
-          <a
-            className="login-form-forgot"
-            href="http://localhost:3000/register"
-          >
-            Quên mật khẩu
-          </a>
+          <Link to="/register">Quên mật khẩu</Link>
         </Form.Item>
 
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Đăng nhập
-        </Button>
+        <Form.Item>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Đăng nhập
+          </Button>
+          Or <Link to="/register">Đăng ký!</Link>
+        </Form.Item>
+
+        <Link to="/admin-login">Bạn là quản trị viên?</Link>
       </Form>
     </>
   );

@@ -1,21 +1,23 @@
-import { Form, Input, Button, Checkbox } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import Header from "../../../components/Header/Header";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input } from "antd";
+import React from "react";
 import { Link } from "react-router-dom";
-import React, { SyntheticEvent } from "react";
-import axios from "axios";
+
+import Header from "../../../components/Header/Header";
+import axiosClient from "../../../config/axiosClient";
 
 export default function Login() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isLogin, setLogin] = React.useState();
+
   const onFinish = async () => {
     const data = { email, password };
-    axios
-      .post("http://localhost:3001/api/users/login", {
-        data,
-        credentials: "include",
-      })
-      .then((response) => console.log(response));
+    axiosClient.post("/users/login", { data }).then((response) => {
+      localStorage.setItem("token", response.data.token);
+      setLogin(response.data.success)
+    });
+    (isLogin)? alert("Successful") : alert("Failed");
   };
 
   const handleChangeEmail = React.useCallback((e) => {

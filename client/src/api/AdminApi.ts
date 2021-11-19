@@ -1,5 +1,5 @@
 import axiosClient from "../config/axiosClient";
-class UserApi {
+class AdminApi {
   authentication = (token?: any) => {
     const url = "/users/auth-token";
     return axiosClient
@@ -15,5 +15,5 @@ class UserApi {
   };
 }
 
-const userApi = new UserApi();
-export default userApi;
+const adminApi = new AdminApi();
+export default adminApi;
