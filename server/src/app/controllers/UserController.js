@@ -56,7 +56,10 @@ class UserController {
                 // tạo token
                 const token = encodedToken(newUser.username, newUser.slug_name, newUser.role);
                 res.setHeader('Authorization', token);
-                res.status(201).json({success: true});
+                res.status(201).json({
+                    success: true, 
+                    token
+                });
             })
             .catch((err) => {
                 return res.status(400).json({
@@ -89,6 +92,7 @@ class UserController {
                         res.setHeader('Authorization', token);
                         res.json({
                             success: true,
+                            token,
                             message: 'Đăng nhập thành công'
                         })
                     }
