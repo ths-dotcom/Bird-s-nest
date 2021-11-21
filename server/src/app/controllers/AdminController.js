@@ -1,4 +1,7 @@
 require('dotenv').config();
+// const newSlug = require('mongoose-slug-generator');
+// const mongoose = require('mongoose');
+// mongoose.plugin(newSlug);
 const Admin = require('../models/Admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -7,6 +10,8 @@ const Order = require('../models/Order');
 const {ACCESS_TOKEN_SECRET} = require('../../configs/JWT/index');
 const saltRounds = parseInt(process.env.saltRounds);
 const { userRole, adminRole } = require('../../configs/datas_roles/roles');
+const Apartment = require('../models/Apartment');
+const { slugify } = require('../../configs/datas_roles/stringToSlug');
 
 const encodedToken = (userName, slugName, userRole) => {
     return jwt.sign(
@@ -126,13 +131,32 @@ class AdminController {
 
     // [PATCH] /api/admins/orders/:id/confirm
     confirm(req, res, next) {
-        Order.updateOne({_id: req.params.id}, {
-            $set :{ status: 'confirmed' }
-        })
-            .then(() => res.json({
-                success: true,
-                message: 'Xác nhận đơn hàng thành công'
-            }))
+        // Order.updateOne({_id: req.params.id}, {
+        //     $set :{ status: 'confirmed' }
+        // })
+        //     .then(() => res.json({
+        //         success: true,
+        //         message: 'Xác nhận đơn hàng thành công'
+        //     }))
+        Order.findById(req.params.id).lean()
+            .then(order=> {
+                return order.apartment_slug;
+            })
+            .then(slug => {
+                Order.updateMany({apartment_slug: slug, status: null}, 
+                    {$set :{ status: 'canceled' }})
+                    .then(() => {
+                        Order.updateOne({_id: req.params.id}, {
+                            $set :{ status: 'confirmed' }
+                        })
+                            .then(() => res.json({
+                                success: true,
+                                message: 'Xác nhận đơn hàng thành công'
+                            }))
+                            .catch(err => {})
+                    })
+                    .catch(err => {})
+            })
             .catch(err => res.status(500).json({
                 success: false,
                 err
@@ -225,6 +249,103 @@ class AdminController {
                 success: true,
                 message: 'Hủy phòng thành công'
             }))
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] /api/admins/add-new
+    addApartment(req, res, next) {
+        const newApartment = new Apartment(req.body.data);
+        newApartment.save()
+            .then(() => {
+                res.json({
+                    success: true,
+                    message: 'Thêm phòng mới thành công'
+                })
+            })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [DELETE] /api/admins/delete-one/:slugName
+    deleteApartment(req, res, next) {
+        Apartment.deleteOne({slug: req.params.slugName})
+            .then(() => res.json({
+                sucess: true,
+                message: 'Xóa phòng thành công'
+            }))
+            .catch(err => res.json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] /api/admins/edit/:slugName
+    editApartment(req, res, next) {
+        let change = req.body.data;
+        let newSlug = slugify(change.name);
+        Apartment.updateOne({slug: req.params.slugName}, {
+            name: change.name,
+            description: change.description,
+            area: change.area,
+            // number_of_cus: change.number_of_cus,
+            price: change.price,
+            slug: newSlug
+        })
+            .then(() => res.json({
+                success: true,
+                message: 'Cập nhật thành công'
+            }))
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] /api/admins/confirmed/search
+    confirmedSearch(req, res, next) {
+        let searchName = req.body.data.search.trim();
+        Order.find({status: 'confirmed', 
+            check_in_date: null, 
+            cus_name: {'$regex': searchName, '$options' : 'i'}}).lean()
+            .then(orders => {
+                if(!orders.length) return res.json({
+                    success: false,
+                    message: 'không tìm thấy'
+                })
+                res.json({
+                    success: true,
+                    orders
+                })
+            })
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] /api/admins/staying/search
+    stayingSearch(req, res, next) {
+        let searchName = req.body.data.search.trim();
+        Order.find({
+            return_date: null, 
+            check_in_date: {$ne: null},
+            status: 'confirmed', 
+            cus_name: {'$regex': searchName, '$options' : 'i'}}).lean()
+            .then(orders => {
+                if(!orders.length) return res.json({
+                    success: false,
+                    message: 'không tìm thấy'
+                })
+                res.json({
+                    success: true,
+                    orders
+                })
+            })
             .catch(err => res.status(500).json({
                 success: false,
                 err

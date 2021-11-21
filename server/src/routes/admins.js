@@ -4,6 +4,11 @@ const adminController = require('../app/controllers/AdminController');
 const signupCheckMiddleware = require('../app/middlewares/signupCheckMiddleware');
 const adminMiddleware = require('../app/middlewares/adminMiddleware');
 
+router.post('/orders/staying/search', adminMiddleware, adminController.stayingSearch);
+router.post('/orders/confirmed/search', adminMiddleware, adminController.confirmedSearch);
+router.post('/edit/:slugName', adminMiddleware, adminController.editApartment);
+router.get('/delete-one/:slugName', adminMiddleware, adminController.deleteApartment);
+router.post('/add-new', adminMiddleware, adminController.addApartment);
 router.patch('/orders/:id/cancel', adminMiddleware, adminController.cancel);
 router.patch('/orders/:id/check-out', adminMiddleware, adminController.checkout);
 router.get('/orders/staying', adminMiddleware, adminController.staying);

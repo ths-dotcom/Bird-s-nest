@@ -41,7 +41,7 @@ class ApartmentController {
 
     // [GET] /api/apartments/:slugName
     detail(req, res, next) {
-        Apartment.findOne({slug: req.params.slugName}).lean()
+        Apartment.findOne({slug: req.params.slugName}, {detail: 0}).lean()
             .then(apartment => {
                 if(!apartment) return res.json({
                     success: false,
@@ -290,17 +290,40 @@ class ApartmentController {
             }))
     }
 
-    // [POST] /api/apartments/add-appartment
-    addApartment(req, res, next) {
-        const newApartment = new Apartment(req.body);
-        newApartment.save()
-            .then(() => {
+    // // [POST] /api/apartments/add-new
+    // addApartment(req, res, next) {
+    //     const newApartment = new Apartment(req.body.data);
+    //     newApartment.save()
+    //         .then(() => {
+    //             res.json({
+    //                 success: true,
+    //                 message: 'Thêm phòng mới thành công'
+    //             })
+    //         })
+    //         .catch(err => res.status(500).json({
+    //             success: false,
+    //             err
+    //         }))
+    // }
+
+    // [POST] /api/apartments/edit
+
+    // [POST] /api/apartments/search
+    search(req, res, next) {
+        let searchName = req.body.data.search.trim();
+        Apartment.find({name: {'$regex': searchName, '$options' : 'i'}}, 
+            {name:1, price:1, slug:1, images:1}).lean()
+            .then(apartments => {
+                if(!apartments.length) return res.json({
+                    success: false,
+                    message: 'không tìm thấy'
+                })
                 res.json({
                     success: true,
-                    message: 'Thêm phòng mới thành công'
+                    apartments
                 })
             })
-            .catch(err => res.status(500).json({
+            .catch(err => res.json({
                 success: false,
                 err
             }))
