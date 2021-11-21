@@ -8,6 +8,7 @@ const Order = require('../models/Order');
 const {ACCESS_TOKEN_SECRET} = require('../../configs/JWT/index');
 const saltRounds = parseInt(process.env.saltRounds);
 const { userRole, adminRole } = require('../../configs/datas_roles/roles');
+const { slugify } = require('../../configs/datas_roles/stringToSlug');
 
 const encodedToken = (userName, slugName, userRole) => {
     return jwt.sign(
@@ -124,7 +125,7 @@ class UserController {
 
     // [GET] /api/users/orders
     orders(req, res, next) {
-        Order.find({cus_slug: req.user.slug}).lean()
+        Order.find({cus_slug: req.user.slug}).sort({order_date: -1}).lean()
             .then(orders => {
                 res.json({
                     success: true,
@@ -145,6 +146,27 @@ class UserController {
             .then(() => res.json({
                 success: true,
                 message: 'Hủy phòng thành công'
+            }))
+            .catch(err => res.status(500).json({
+                success: false,
+                err
+            }))
+    }
+
+    // [POST] api/users/:slugName/edit
+    editProfile(req, res, next){
+        let change = req.body.data;
+        let newSlug = slugify(change.username);
+        User.updateOne({slug_name: req.params.slugName}, {
+            username: change.username,
+            tel: change.tel,
+            address: change.address,
+            email : change.email,
+            slug_name: newSlug
+        })
+            .then(() => res.json({
+                success: true,
+                message: 'Thay đổi thông tin thành công'
             }))
             .catch(err => res.status(500).json({
                 success: false,

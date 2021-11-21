@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const apartmentController = require('../app/controllers/ApartmentController');
 
-router.post('/add-appartment', apartmentController.addApartment);
+router.post('/search', apartmentController.search);
+// router.post('/add-new', apartmentController.addApartment);
 router.get('/:slugName/check-order', apartmentController.checkOrder);
 router.get('/sort/:value', apartmentController.showAllSort);
 router.post('/:slugName/save-order', apartmentController.saveOrder);
