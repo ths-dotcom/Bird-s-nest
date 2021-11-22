@@ -4,6 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import axiosClient from "../../../config/axiosClient";
+import "./AdminLogin.scss"
 
 export default function AdminLogin() {
   const [email, setEmail] = React.useState("");
@@ -12,11 +13,12 @@ export default function AdminLogin() {
 
   const onFinish = async () => {
     const data = { email, password };
-    axiosClient.post("/users/login", { data }).then((response) => {
+    axiosClient.post("/admins/login", { data }).then((response) => {
       localStorage.setItem("token", response.data.token);
-      setLogin(response.data.success)
+      localStorage.setItem("admin-slug", response.data.token);
+      setLogin(response.data.success);
     });
-    (isLogin)? alert("Successful") : alert("Failed");
+    isLogin ? alert("Successful") : alert("Failed");
   };
 
   const handleChangeEmail = React.useCallback((e) => {
@@ -28,13 +30,14 @@ export default function AdminLogin() {
   }, []);
 
   return (
-    <>
-    gjsdhjghsjdkg
+    <div className="admin-login-container">
+      <h1 className="admin-title">ADMIN - ĐĂNG NHẬP</h1>
       <Form
+        className="admin-login"
         name="normal_login"
-        className="login-form"
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        
       >
         <Form.Item
           name="Email"
@@ -73,11 +76,9 @@ export default function AdminLogin() {
           >
             Đăng nhập
           </Button>
-          Or <Link to="/register">Đăng ký!</Link>
         </Form.Item>
-
-        <Link to="/admin-login">Bạn là quản trị viên?</Link>
+        <Link className="admin-login-link" to="/admin-dashboard">Dashboard </Link>
       </Form>
-    </>
+    </div>
   );
 }

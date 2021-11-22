@@ -14,7 +14,7 @@ router.patch('/orders/:id/check-out', adminMiddleware, adminController.checkout)
 router.get('/orders/staying', adminMiddleware, adminController.staying);
 router.patch('/orders/:id/check-in', adminMiddleware, adminController.checkin);
 router.get('/orders/confirmed', adminMiddleware, adminController.confirmed);
-router.patch('/orders/:id/confirm', adminMiddleware, adminController.confirm);
+router.get('/orders/:id/confirm', adminMiddleware, adminController.confirm);
 router.get('/orders/waiting', adminMiddleware, adminController.waiting);
 router.post('/login', adminController.login);
 router.post('/signup', signupCheckMiddleware, adminController.signup);

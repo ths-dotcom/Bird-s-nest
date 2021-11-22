@@ -3,6 +3,7 @@ import React from "react";
 
 import Header from "../../../components/Header/Header";
 import axiosClient from "../../../config/axiosClient";
+import "./Register.scss"
 
 const formItemLayout = {
   labelCol: {
@@ -67,7 +68,9 @@ export default function Register() {
     <>
       {" "}
       <Header />
+      <h1 className="register-title">XIN MỜI ĐĂNG KÝ!</h1>
       <Form
+        className="register-form"
         {...formItemLayout}
         form={form}
         name="register"

@@ -10,8 +10,35 @@ class AdminApi {
   };
 
   get = (slug?: string) => {
-    const url = "/users/" + slug;
+    const url = "/admins/" + slug;
     return axiosClient.get(url).then((response) => response.data);
+  };
+
+  waiting = (token?: any) => {
+    const url = "/admins/orders/waiting";
+    return axiosClient
+      .get(url, {
+        headers: { Authorization: token },
+      })
+      .then((response) => response.data);
+  };
+
+  confirmed = (token?: any) => {
+    const url = "/admins/orders/confirmed";
+    return axiosClient
+      .get(url, {
+        headers: { Authorization: token },
+      })
+      .then((response) => response.data);
+  };
+
+  staying = (token?: any) => {
+    const url = "/admins/orders/staying";
+    return axiosClient
+      .get(url, {
+        headers: { Authorization: token },
+      })
+      .then((response) => response.data);
   };
 }
 

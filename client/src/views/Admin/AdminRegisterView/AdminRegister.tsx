@@ -1,8 +1,9 @@
 import { Button, Checkbox, Form, Input } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 
-import Header from "../../../components/Header/Header";
 import axiosClient from "../../../config/axiosClient";
+import "./AdminRegister.scss";
 
 const formItemLayout = {
   labelCol: {
@@ -56,17 +57,17 @@ export default function AdminRegister() {
   const onFinish = async () => {
     const data = { email, password, username, tel, address };
 
-    axiosClient.post("/users/signup", { data }).then((response) => {
-      setSignUp(response.data.message);
+    axiosClient.post("/admins/signup", { data }).then((response) => {
+      setSignUp(response.data.success);
     });
-
     isSignUp ? alert("Successful") : alert("Email đã được đăng kí");
   };
 
   return (
-    <>
-
+    <div className="admin-register-container"> 
+      <h1 className="admin-title">ADMIN - ĐĂNG KÝ TÀI KHOẢN</h1>
       <Form
+        className="admin-register"
         {...formItemLayout}
         form={form}
         name="register"
@@ -182,6 +183,8 @@ export default function AdminRegister() {
           <Button htmlType="submit">Đăng ký</Button>
         </Form.Item>
       </Form>
-    </>
+
+      <Link className="admin-register-link" to="/admin-login">Chuyen den dang nhap</Link>
+    </div>
   );
 }

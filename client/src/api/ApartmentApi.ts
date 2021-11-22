@@ -8,8 +8,6 @@ class ApartmentApi {
      }).then(response => response.data);
   };
 
-
-
   get = (name?: string) => {
     const url = "/apartments/" + name;
     return axiosClient.get(url).then(response => response.data);
