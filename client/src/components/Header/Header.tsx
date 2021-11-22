@@ -38,10 +38,10 @@ export default function Header() {
           <Link className="link" to="/">
             Trang chủ
           </Link>
-          <Link className="link" to="/apartment-type-master">
+          <Link className="link" to="/apartment-type">
             Loại căn hộ
           </Link>
-          <Link className="link" to="/apartment-master">
+          <Link className="link" to="/apartment">
             Căn hộ
           </Link>
           <Link className="link" to="/ultility">
